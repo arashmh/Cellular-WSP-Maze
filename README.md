@@ -7,7 +7,7 @@
 <br>
 ibiLAB · Luleå University of Technology
 
-[🌐 **Online demo**](#online-demo-placeholder) &nbsp;·&nbsp;
+[🌐 **Online demo**](https://cellular-wsp-maze.onrender.com) &nbsp;·&nbsp;
 [📄 **Article**](https://comp-minds-research.onrender.com/maze/maze.html) &nbsp;·&nbsp;
 [🧠 **Network view**](viz/) &nbsp;·&nbsp;
 [📝 **Citation**](#-citation)
