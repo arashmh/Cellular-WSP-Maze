@@ -8,7 +8,7 @@
 ibiLAB · Luleå University of Technology
 
 [🌐 **Online demo**](#online-demo-placeholder) &nbsp;·&nbsp;
-[📄 **Article**](#article-placeholder) &nbsp;·&nbsp;
+[📄 **Article**](https://comp-minds-research.onrender.com/maze/maze.html) &nbsp;·&nbsp;
 [🧠 **Network view**](viz/) &nbsp;·&nbsp;
 [📝 **Citation**](#-citation)
 
@@ -99,7 +99,7 @@ If you use this work, please cite:
   year   = {2026},
   month  = nov,
   note   = {Blog post, ibiLAB, Copenhagen},
-  url    = {https://github.com/arashmh/Cellular-WSP-Maze}
+  url    = {https://comp-minds-research.onrender.com/maze/maze.html}
 }
 ```
 
