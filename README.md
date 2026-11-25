@@ -24,7 +24,7 @@ An AI agent (Claude Opus 5.5, in Claude Code) programmed the weights of a neural
 <td width="50%" align="center"><img src="assets/maze-hard-50-random.gif" alt="The automaton solving Maze-Hard test mazes"></td>
 </tr>
 <tr>
-<td align="center"><sub><b>Inside one cell.</b> The 3D network view: every unit and weight of the cell's rule, animated while a maze is solved.</sub></td>
+<td align="center"><sub><b>Inside one cell.</b> The 3D network view: every unit and weight of the cell's rule, animated while a maze is solved. <a href="assets/maze-network-tour.mp4">MP4</a></sub></td>
 <td align="center"><sub><b>Maze-Hard.</b> The 208-weight edition solving test mazes of the 30 × 30 benchmark.</sub></td>
 </tr>
 </table>
