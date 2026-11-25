@@ -116,6 +116,11 @@
               background: var(--panel); border: 1px solid var(--ink); border-radius: 4px; letter-spacing: .06em; }
   #fullView.on { display: block; }
   #bTheme { margin-left: 14px; padding: 1px 8px; font-size: 13px; line-height: 1.2; }
+  /* links out: the demos site and the article, as orange buttons after the title (the colour of the article's link bubbles) */
+  header .hbtn { display: inline-block; margin-left: 8px; padding: 3px 11px; font-size: 11px; font-weight: 600; letter-spacing: .06em; color: #1a1a1a;
+                 background: #ffa31a; border: 1px solid #ffa31a; border-radius: 999px; vertical-align: 1px; transition: background .2s, border-color .2s; }
+  h1 + .hbtn { margin-left: 18px; }
+  header .hbtn:hover, header .hbtn:focus-visible { background: #f59400; border-color: #f59400; color: #1a1a1a; outline: none; }
   #tip { max-width: 380px; } #tip .q { margin-top: 3px; color: var(--ink); } #tip .q span, .wwd .q span { color: var(--srcTxt); }
   .wwd { margin: 4px 0 6px; padding: 5px 7px; background: var(--fbg); border-left: 2px solid var(--srcTxt); }
   .wwd .q { margin: 2px 0; } .wwd .v { color: var(--dim); margin-top: 3px; }
@@ -162,7 +167,7 @@ try { const t = (localStorage.getItem("caviz.v2.theme") || "dark"); document.doc
 <div id="stage"></div>
 <div id="labels"></div>
 <header>
-  <h1>Maze · inside one cell</h1><a class="demo" href="../maze/" target="_top">solve a maze ↗</a><button id="bTheme" title="light / dark mode">☾</button>
+  <h1>Maze · inside one cell</h1><a class="hbtn" href="https://cellular-wsp-maze.onrender.com/" target="_blank" rel="noopener" title="All the maze demos">Demo page ↗</a><a class="hbtn" href="https://comp-minds-research.onrender.com/maze/maze.html" target="_blank" rel="noopener" title="The article">Article ↗</a><button id="bTheme" title="light / dark mode">☾</button>
   <p id="sub">loading the model …</p>
 </header>
 
