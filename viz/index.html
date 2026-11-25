@@ -157,6 +157,8 @@
   #info .more { transition: opacity .3s ease, max-height .3s ease; max-height: 4000px; opacity: 1; }
   #info.half .more { max-height: 0; opacity: 0; overflow: hidden; }
   #info.half .wwd .q { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  #info { display: none !important; }     /* no inspector: the hover boxes carry the details */
+  @media (max-width: 1399px) { #fullView, #bFull, #fullBtn { top: 60px !important; } }     /* narrower windows: "Back to Overview" below the header row, clear of its buttons */
 </style>
 </head>
 <body>
@@ -171,7 +173,7 @@ try { const t = (localStorage.getItem("caviz.v2.theme") || "dark"); document.doc
   <p id="sub">loading the model …</p>
 </header>
 
-<button id="fullView" title="fly back to the whole network (Esc, or click empty space)">⤢ full view</button>
+<button id="fullView" title="fly back to the whole network (Esc, or click empty space)">⤢ Back to Overview</button>
 <button id="tab" title="hide / show the panel">‹</button>
 <script>/* before the first paint: the remembered panel state (collapsed unless the user opened it) */
 try { if (localStorage.getItem("caviz.v2.panelCollapsed") !== "0") { document.documentElement.classList.add("collapsed"); document.body.classList.add("collapsed"); } } catch (e) {}</script>
@@ -1620,7 +1622,7 @@ for (const r of Object.values(REGIONS)) { r.y0 = -PANEL_TOP - 1.0; r.y1 = PANEL_
 // tour framings: fit a region of the pipeline into the unobstructed rect (right of the side panel, above the bar, left of the info panel)
 function frameBox(b) {
   const W = innerWidth, H = innerHeight, l = $('left').getBoundingClientRect(), bar = $('bar').getBoundingClientRect(), info = $('info');
-  const infoW = $('infoBody').innerHTML && !info.classList.contains('min') ? info.getBoundingClientRect().width + 14 : 0;
+  const infoW = 0;     // no inspector panel
   let x0 = (l.right || 0) + 12, x1 = W - 16 - infoW, y0 = 50, y1 = freeBottom(bar.top || H) - 8;
   if (x1 - x0 < W * 0.3) { x0 = 0; x1 = W; }
   const t = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
