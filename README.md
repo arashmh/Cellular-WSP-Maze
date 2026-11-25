@@ -83,7 +83,7 @@ python3 -m http.server 8000   # then open http://localhost:8000
 ## 👥 Authors
 
 - **Arash Moaddel**, PhD
-- **Ashkan Moaddel**, PhD candidate, Luleå University of Technology
+- **Ashkan Moaddel**, PhD student, Luleå University of Technology
 - **Nina Uller**, ibiLAB
 
 The weights, the program and the demos were produced by **Claude Opus 5.5** (Anthropic), working as a coding agent in Claude Code, which programmed the weight space directly.
