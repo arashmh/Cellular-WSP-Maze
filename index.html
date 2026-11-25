@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cellular Weight-Space Programming · Maze</title>
+<title>Cellular Weight-Space Programming · Maze Solver</title>
 <meta name="description" content="A neural cellular automaton whose weights an AI agent programmed directly, with no training: 115 non-zero weights find every shortest path in any maze. Live demos.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <style>
@@ -15,13 +15,20 @@
   #field { position: fixed; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; opacity: .5; }
   main { position: relative; height: 100vh; height: 100dvh; max-width: 1240px; margin: 0 auto;
          padding: clamp(16px, 4vh, 40px) clamp(16px, 4vw, 48px); display: flex; flex-direction: column; justify-content: center; }
+  main { padding-top: 96px; }
   header { margin-bottom: clamp(16px, 5vh, 52px); }
+  /* the comp-minds research wordmark (as on its hub and articles): top left, opens the research hub */
+  a.home { position: absolute; z-index: 3; top: 24px; left: 28px; font: 600 22px/1.2 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+           letter-spacing: .02em; color: #22252a; text-decoration: none; }
+  a.home i { font-style: normal; color: #0f6e63; display: block; }
+  a.home .arr { font-size: .8em; font-weight: 700; vertical-align: .3em; margin-left: .12em; color: #22252a; }
+  a.home:hover { opacity: .8; }
   h1 { font-size: 15px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; margin: 0 0 8px; }
   p.sub { margin: 0; color: var(--dim); max-width: 64ch; }
   p.sub b { color: var(--ink); font-weight: 600; }
   /* three equal squares, equally spaced; side = the largest that fits the row and the screen height */
   #cards { --gap: clamp(16px, 3vw, 40px);
-           --s: min(calc((100vw - 2 * clamp(16px, 4vw, 48px) - 2 * var(--gap)) / 3), calc(100dvh - 250px), 380px);
+           --s: min(calc((100vw - 2 * clamp(16px, 4vw, 48px) - 2 * var(--gap)) / 3), calc(100dvh - 330px), 380px);
            display: flex; justify-content: space-between; gap: var(--gap); }
   a.card { position: relative; flex: none; width: var(--s); height: var(--s); display: block; overflow: hidden;
            border-radius: 14px; background: var(--card); color: var(--ink); text-decoration: none;
@@ -46,11 +53,13 @@
   footer a:hover { border-color: var(--teal); color: var(--teal); }
   /* phones and narrow windows: the squares stack, still one screen high */
   @media (max-width: 760px) {
-    main { justify-content: flex-start; padding-top: 18px; padding-bottom: 14px; }
+    main { justify-content: flex-start; padding-top: 64px; padding-bottom: 14px; }
+    a.home { top: 14px; left: 16px; font-size: 16px; }
+    .tag { display: none; }
     header { margin-bottom: 14px; }
     h1 { font-size: 12.5px; letter-spacing: .22em; }
     p.sub { font-size: 12px; line-height: 1.45; }
-    #cards { --gap: 12px; --s: min(calc(100vw - 32px), calc((100dvh - 290px) / 3));
+    #cards { --gap: 12px; --s: min(calc(100vw - 32px), calc((100dvh - 336px) / 3));
              flex-direction: column; align-items: center; }
     .note { display: none; }
     .name { font-size: 14.5px; white-space: nowrap; }
@@ -63,9 +72,10 @@
 </head>
 <body>
 <canvas id="field" aria-hidden="true"></canvas>
+<a class="home" href="https://comp-minds-research.onrender.com" target="_blank" rel="noopener" title="comp-minds research: all articles">comp-minds<span class="arr" aria-hidden="true">&#8599;</span> <i>research</i></a>
 <main>
   <header>
-    <h1>Cellular Weight-Space Programming · Maze</h1>
+    <h1>Cellular Weight-Space Programming · Maze Solver</h1>
     <p class="sub">A neural cellular automaton whose weights an AI agent programmed directly, with no training. <b>115 non-zero weights</b> find every shortest path in any maze; <b>208</b> solve all 1,000 Maze-Hard test mazes.</p>
   </header>
   <div id="cards">
