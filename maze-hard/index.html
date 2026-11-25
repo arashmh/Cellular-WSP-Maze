@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maze-Hard · Cellular Weight-Space Programming</title>
+<meta name="description" content="The Maze-Hard edition of the maze automaton: 208 non-zero weights, programmed directly by an AI agent, solve all 1,000 test mazes of Maze-Hard, live in your browser.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1b1d21; --ink2: #4a4f57; --dim: #6b7079; --faint: #9aa0a8; --rule: #e4e6ea; --soft: #f5f6f8; --card: #fbfbfc;
+    --accent: #0f6e63; --accent-soft: #e3f1ee; --warm: #c2531b;
+    --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--ink); font: 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+  main { max-width: 1080px; margin: 0 auto; padding: 34px 22px 60px; }
+  nav.top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font: 500 13px/1 var(--sans); margin-bottom: 26px; }
+  nav.top a { color: var(--ink); text-decoration: none; border: 1px solid var(--rule); border-radius: 999px; padding: 8px 13px; display: inline-flex; align-items: center; gap: 7px; }
+  nav.top a:hover { border-color: var(--accent); color: var(--accent); }
+  nav.top a svg { width: 14px; height: 14px; }
+  nav.top .sp { flex: 1; }
+  .kicker { font: 600 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  h1 { font: 800 34px/1.15 var(--sans); letter-spacing: -.02em; margin: 12px 0 12px; }
+  p.lead { color: var(--ink2); margin: 0 0 24px; max-width: 70ch; }
+  .panel { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 20px; margin-bottom: 18px; }
+  p.note { font-size: 13px; line-height: 1.55; color: var(--ink2); margin: 10px 0 0; }
+  code { font: .86em var(--mono); background: var(--soft); padding: 1px 5px; border-radius: 4px; }
+  footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--dim); }
+  @media (max-width: 680px) { h1 { font-size: 27px; } main { padding-top: 22px; } .panel { padding: 12px; } }
+</style>
+</head>
+<body>
+<main>
+  <nav class="top"><a href="../">← All demos</a><a href="../viz/" target="_blank" rel="noopener">Inside one cell, in 3D ↗</a><span class="sp"></span><a href="https://github.com/arashmh/Cellular-WSP-Maze" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> Code</a></nav>
+  <div class="kicker">Live demo · 208 non-zero weights</div>
+  <h1>Maze-Hard: 1,000 of 1,000</h1>
+  <p class="lead">The 1,000 test mazes of Maze-Hard (30 × 30, every shortest path 110 cells or longer), run in your browser by the network itself. <b>One path, as scored</b> runs the Maze-Hard edition: the 115-weight program plus a pointer register that picks the benchmark’s path, 208 non-zero weights of 3,027 numbers. <b>Every shortest path</b> runs the 115-weight automaton unchanged. Click any square of the grid to run that maze.</p>
+  <div class="panel"><div id="fig-hard"></div></div>
+  <div class="panel"><div id="fig-hard-board"></div></div>
+  <p class="note">Left: the share of the 1,000 test mazes solved against the number of weights (log scale); teal is this work, orange the agent-written looped transformer of Looped Weight-Space Programming, grey the trained reasoners as compiled there. Right: how many shortest paths each test maze has. The mazes are the test split of <a href="https://huggingface.co/datasets/sapientinc/maze-30x30-hard-1k" target="_blank" rel="noopener">sapientinc/maze-30x30-hard-1k</a>, packed into <code>maze-hard/maze-hard-data.js</code>. Neither the dataset’s answer nor breadth-first search is ever given to the cells.</p>
+  <footer>Cellular Weight-Space Programming · Arash Moaddel, Ashkan Moaddel, Nina Uller · ibiLAB. The weights were programmed directly in weight space by Claude Opus 5.5 (Anthropic) in Claude Code, with no training.</footer>
+</main>
+<script src="../models/model-data.js"></script>
+<script src="../models/model-hard-data.js"></script>
+<script src="maze-hard-data.js"></script>
+<script src="../js/automaton.js"></script>
+<script src="../js/blog.js"></script>
+</body>
+</html>

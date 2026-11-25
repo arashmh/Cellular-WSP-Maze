@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cellular Weight-Space Programming · Maze</title>
+<meta name="description" content="A neural cellular automaton whose weights an AI agent programmed directly, with no training: 115 non-zero weights find every shortest path in any maze. Live demos.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+  :root { --bg: #f4f5f2; --ink: #22252a; --dim: #737780; --line: #d9dcd6; --card: #ffffff;
+          --teal: #0f6e63; --orange: #e8730f; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink);
+               font: 15px/1.55 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  #field { position: fixed; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; opacity: .5; }
+  main { position: relative; height: 100vh; height: 100dvh; max-width: 1240px; margin: 0 auto;
+         padding: clamp(16px, 4vh, 40px) clamp(16px, 4vw, 48px); display: flex; flex-direction: column; justify-content: center; }
+  header { margin-bottom: clamp(16px, 5vh, 52px); }
+  h1 { font-size: 15px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; margin: 0 0 8px; }
+  p.sub { margin: 0; color: var(--dim); max-width: 64ch; }
+  p.sub b { color: var(--ink); font-weight: 600; }
+  /* three equal squares, equally spaced; side = the largest that fits the row and the screen height */
+  #cards { --gap: clamp(16px, 3vw, 40px);
+           --s: min(calc((100vw - 2 * clamp(16px, 4vw, 48px) - 2 * var(--gap)) / 3), calc(100dvh - 250px), 380px);
+           display: flex; justify-content: space-between; gap: var(--gap); }
+  a.card { position: relative; flex: none; width: var(--s); height: var(--s); display: block; overflow: hidden;
+           border-radius: 14px; background: var(--card); color: var(--ink); text-decoration: none;
+           box-shadow: 0 0 0 1px var(--line), 0 8px 28px rgba(30, 40, 35, .08);
+           transition: transform .25s, box-shadow .25s; }
+  a.card:hover, a.card:focus-visible { transform: translateY(-3px); outline: none;
+           box-shadow: 0 0 0 1px var(--teal), 0 14px 36px rgba(15, 110, 99, .18); }
+  a.card canvas, a.card .bgimg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  a.card canvas { image-rendering: pixelated; }
+  .bgimg { background: url(assets/viz_cover.jpg) center / cover; filter: blur(5px) saturate(1.1); transform: scale(1.08); }
+  .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,0) 35%, rgba(255,255,255,.94) 78%); }
+  .dark .shade { background: linear-gradient(180deg, rgba(10,14,20,0) 30%, rgba(10,14,20,.82) 80%); }
+  .txt { position: absolute; left: 0; right: 0; bottom: 0; padding: clamp(12px, 2.2vh, 22px) clamp(14px, 1.6vw, 22px); }
+  .dark .txt { color: #eef1f4; }
+  .tag { display: inline-block; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; padding: 2px 7px;
+         border: 1px solid currentColor; border-radius: 999px; opacity: .7; margin-bottom: 8px; }
+  .name { display: block; font-size: clamp(15px, 1.5vw, 19px); font-weight: 600; margin-bottom: 3px; }
+  .name::after { content: " \2197"; font-weight: 400; opacity: .5; }
+  .note { display: block; font-size: 12.5px; line-height: 1.45; opacity: .78; }
+  footer { margin-top: clamp(16px, 5vh, 52px); display: flex; flex-wrap: wrap; gap: 6px 22px; color: var(--dim); font-size: 12px; letter-spacing: .04em; }
+  footer a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+  footer a:hover { border-color: var(--teal); color: var(--teal); }
+  /* phones and narrow windows: the squares stack, still one screen high */
+  @media (max-width: 760px) {
+    main { justify-content: flex-start; padding-top: 18px; padding-bottom: 14px; }
+    header { margin-bottom: 14px; }
+    h1 { font-size: 12.5px; letter-spacing: .22em; }
+    p.sub { font-size: 12px; line-height: 1.45; }
+    #cards { --gap: 12px; --s: min(calc(100vw - 32px), calc((100dvh - 268px) / 3));
+             flex-direction: column; align-items: center; }
+    .note { display: none; }
+    .name { font-size: 14.5px; white-space: nowrap; }
+    .tag { margin-bottom: 4px; font-size: 9px; letter-spacing: .08em; white-space: nowrap; }
+    .txt { padding: 10px 14px; }
+    footer { margin-top: 12px; font-size: 11px; gap: 2px 14px; }
+    #rule { display: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="field" aria-hidden="true"></canvas>
+<main>
+  <header>
+    <h1>Cellular Weight-Space Programming · Maze</h1>
+    <p class="sub">A neural cellular automaton whose weights an AI agent programmed directly, with no training. <b>115 non-zero weights</b> find every shortest path in any maze; <b>208</b> solve all 1,000 Maze-Hard test mazes.</p>
+  </header>
+  <div id="cards">
+    <a class="card dark" href="viz/" target="_blank" rel="noopener">
+      <div class="bgimg"></div><div class="shade"></div>
+      <div class="txt"><span class="tag">3D · network</span><span class="name">Inside one cell</span><span class="note">Every unit and weight of the cell's network, animated while a maze is solved.</span></div>
+    </a>
+    <a class="card" href="maze/" target="_blank" rel="noopener">
+      <canvas id="cvMaze" aria-hidden="true"></canvas><div class="shade"></div>
+      <div class="txt"><span class="tag">live · 115 weights</span><span class="name">Solve a maze</span><span class="note">Draw walls, move the goal, add noise: the cells find every shortest path.</span></div>
+    </a>
+    <a class="card" href="maze-hard/" target="_blank" rel="noopener">
+      <canvas id="cvHard" aria-hidden="true"></canvas><div class="shade"></div>
+      <div class="txt"><span class="tag">benchmark · 208 weights</span><span class="name">Maze-Hard</span><span class="note">All 1,000 test mazes of 30 × 30, run in your browser: 1,000 of 1,000.</span></div>
+    </a>
+  </div>
+  <footer>
+    <a href="https://github.com/arashmh/Cellular-WSP-Maze" target="_blank" rel="noopener">github.com/arashmh/Cellular-WSP-Maze</a>
+    <span>Arash Moaddel · Ashkan Moaddel · Nina Uller · ibiLAB</span>
+    <span id="rule"></span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- background: an elementary cellular automaton, drawn one row per tick from the top;
+  //      it stops once it has filled the screen height (and starts again on resize)
+  const field = document.getElementById('field'), fctx = field.getContext('2d');
+  const RULES = [30, 90, 110, 150, 73, 105], CELL = 6;
+  let rule, row, w, h, y, img, timer = null;
+  function reset() {
+    w = Math.ceil(innerWidth / CELL); h = Math.ceil(innerHeight / CELL);
+    field.width = w; field.height = h; img = fctx.createImageData(w, h); y = 0;
+    rule = RULES[Math.floor(Math.random() * RULES.length)];
+    row = new Uint8Array(w);
+    if (rule === 30 || rule === 90 || rule === 150) row[w >> 1] = 1;
+    else for (let i = 0; i < w; i++) row[i] = Math.random() < 0.5 ? 1 : 0;
+    document.getElementById('rule').textContent = 'background: elementary rule ' + rule;
+    clearInterval(timer);
+    if (reduce) { while (y < h) tick(true); fctx.putImageData(img, 0, 0); }
+    else timer = setInterval(tick, 40);
+  }
+  function tick(quiet) {
+    if (y >= h) { clearInterval(timer); timer = null; return; }
+    const d = img.data, o = y * w * 4;
+    for (let x = 0; x < w; x++) if (row[x]) { d[o + x*4] = 15; d[o + x*4 + 1] = 110; d[o + x*4 + 2] = 99; d[o + x*4 + 3] = 70; }
+    const next = new Uint8Array(w);
+    for (let x = 0; x < w; x++) next[x] = (rule >> ((row[(x + w - 1) % w] << 2) | (row[x] << 1) | row[(x + 1) % w])) & 1;
+    row = next; y++;
+    if (!quiet) fctx.putImageData(img, 0, 0);
+  }
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(reset, 150); });
+  reset();
+
+  // ---- card art: a distance wave flooding out from the goal, then the path growing from the start,
+  //      the way the automaton's two registers D and ON fill the grid (decoration, not the network)
+  function rng(s) { return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
+  function perfectMaze(n, r) {            // n odd; recursive backtracker with a few loops
+    const g = new Uint8Array(n * n).fill(1), st = [[1, 1]]; g[n + 1] = 0;
+    while (st.length) {
+      const [x, y] = st[st.length - 1], nb = [];
+      for (const [dx, dy] of [[2,0],[-2,0],[0,2],[0,-2]]) { const X = x + dx, Y = y + dy;
+        if (X > 0 && Y > 0 && X < n - 1 && Y < n - 1 && g[Y*n + X]) nb.push([X, Y, dx, dy]); }
+      if (!nb.length) { st.pop(); continue; }
+      const [X, Y, dx, dy] = nb[Math.floor(r() * nb.length)];
+      g[(y + dy/2) * n + x + dx/2] = 0; g[Y*n + X] = 0; st.push([X, Y]);
+    }
+    for (let k = 0; k < n * n / 14; k++) { const i = Math.floor(r() * n * n), x = i % n, y = (i / n) | 0;
+      if (x > 0 && y > 0 && x < n-1 && y < n-1 && g[i] && ((g[i-1] === 0 && g[i+1] === 0) || (g[i-n] === 0 && g[i+n] === 0))) g[i] = 0; }
+    return { g, s: n + 1, t: n * n - n - 2 };
+  }
+  function openMaze(n, r) {               // Maze-Hard style: open floor with scattered walls
+    const g = new Uint8Array(n * n);
+    for (let i = 0; i < n * n; i++) { const x = i % n, y = (i / n) | 0;
+      g[i] = (x === 0 || y === 0 || x === n-1 || y === n-1 || r() < 0.33) ? 1 : 0; }
+    const s = n + 1, t = n * n - n - 2; g[s] = g[t] = 0; return { g, s, t };
+  }
+  function bfs(m, n) {
+    const D = new Int32Array(n * n).fill(-1), q = [m.t]; D[m.t] = 0;
+    for (let k = 0; k < q.length; k++) { const i = q[k];
+      for (const j of [i + n, i - 1, i + 1, i - n]) if (!m.g[j] && D[j] < 0) { D[j] = D[i] + 1; q.push(j); } }
+    return D;
+  }
+  function art(id, n, make, onePath) {
+    const cv = document.getElementById(id), ctx = cv.getContext('2d');
+    cv.width = cv.height = n; const im = ctx.createImageData(n, n);
+    let seed = (Math.random() * 1e9) | 0, m, D, maxD, L, path, t, hold;
+    function fresh() {
+      for (let tries = 0; ; tries++) { m = make(n, rng(seed++)); D = bfs(m, n); if (D[m.s] > n) break; }
+      L = D[m.s]; maxD = 0; for (const d of D) if (d > maxD) maxD = d;
+      path = new Uint8Array(n * n);                         // every shortest path, or the one the pointer picks
+      if (onePath) { let i = m.s; path[i] = 1; while (i !== m.t) { for (const j of [i + n, i - 1, i + 1, i - n]) if (D[j] === D[i] - 1) { i = j; break; } path[i] = 1; } }
+      else { const on = [m.s]; path[m.s] = 1; for (let k = 0; k < on.length; k++) { const i = on[k];
+        for (const j of [i + n, i - 1, i + 1, i - n]) if (D[j] === D[i] - 1 && !path[j]) { path[j] = 1; on.push(j); } } }
+      t = 0; hold = 0;
+    }
+    function draw() {
+      const d = im.data;
+      for (let i = 0; i < n * n; i++) {
+        let c;
+        if (m.g[i]) c = [44, 50, 62];
+        else if (i === m.s) c = [22, 163, 74];
+        else if (i === m.t) c = [162, 28, 175];
+        else if (path[i] && t > L + 1 + (L - D[i])) c = [249, 115, 22];
+        else if (D[i] >= 0 && D[i] <= t) { const u = D[i] / Math.max(1, maxD); c = [Math.round(43 + 180 * u), Math.round(95 + 135 * u), Math.round(174 + 60 * u)]; }
+        else c = [244, 245, 247];
+        d[i*4] = c[0]; d[i*4+1] = c[1]; d[i*4+2] = c[2]; d[i*4+3] = 255;
+      }
+      ctx.putImageData(im, 0, 0);
+    }
+    fresh(); draw();
+    if (reduce) { t = 1e9; draw(); return; }
+    setInterval(() => {
+      if (t > 2 * L + 2) { if (++hold > 40) fresh(); }
+      else t++;
+      draw();
+    }, 70);
+  }
+  art('cvMaze', 33, perfectMaze, false);
+  art('cvHard', 30, openMaze, true);
+})();
+</script>
+</body>
+</html>
