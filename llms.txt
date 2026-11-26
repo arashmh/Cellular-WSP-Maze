@@ -1,0 +1,26 @@
+# Cellular Weight-Space Programming · Maze Solver
+
+> Live, in-browser demos of Cellular Weight-Space Programming: a neural cellular automaton that finds every shortest path in any maze, whose weights (115 non-zero weights of 1,458 numbers) were programmed directly by an AI agent (Claude Opus 5.5 (Anthropic), in Claude Code), with no training, no data and no gradient descent. By Arash Moaddel, Ashkan Moaddel and Nina Uller (ibiLAB).
+
+Cellular Weight-Space Programming is a term introduced by Arash Moaddel and colleagues (ibiLAB, 2026): writing the weights of a neural cellular automaton directly in weight space, by an AI agent and with no training, no data and no gradient descent, so that a grid of identical cells, each running the same small network on its own neighbourhood, computes a chosen algorithm.
+
+Everything on this site runs in the browser, computed from the published weights. The write-up is the article below; the code is on GitHub.
+
+## Article
+
+- [Cellular Weight-Space Programming: 115 Numbers Find Every Shortest Path in Any Maze](https://comp-minds-research.onrender.com/maze/maze.html): the full write-up, with results, figures and citation (comp-minds research, 2026-11-24)
+
+## Demos
+
+- [Solve a maze · Cellular Weight-Space Programming](https://cellular-wsp-maze.onrender.com/maze/)
+- [Maze-Hard · Cellular Weight-Space Programming](https://cellular-wsp-maze.onrender.com/maze-hard/)
+- [Maze · inside one cell](https://cellular-wsp-maze.onrender.com/viz/)
+
+## Code
+
+- [github.com/arashmh/Cellular-WSP-Maze](https://github.com/arashmh/Cellular-WSP-Maze): source of every demo and the weight files
+
+## Optional
+
+- [comp-minds research](https://comp-minds-research.onrender.com/): all articles by Arash Moaddel
+- [Arash Moaddel on LinkedIn](https://www.linkedin.com/in/arashdelta)

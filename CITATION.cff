@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the article below."
+title: "Cellular-WSP-Maze: Cellular Weight-Space Programming: 115 Numbers Find Every Shortest Path in Any Maze"
+type: software
+authors:
+  - family-names: Moaddel
+    given-names: Arash
+    affiliation: ibiLAB
+  - family-names: Moaddel
+    given-names: Ashkan
+    affiliation: Luleå University of Technology
+  - family-names: Uller
+    given-names: Nina
+    affiliation: ibiLAB
+repository-code: "https://github.com/arashmh/Cellular-WSP-Maze"
+url: "https://cellular-wsp-maze.onrender.com/"
+date-released: "2026-11-24"
+abstract: "An AI agent wrote the weights of a neural cellular automaton that solves mazes, with no training, no data and no gradient. 115 of its 1,458 numbers are non-zero. Every cell sees only its 3 × 3 neighbourhood, and the cells mark every shortest path from the start to the goal, exactly."
+keywords:
+  - "Cellular Weight-Space Programming"
+  - "weight-space programming"
+  - "neural cellular automaton"
+  - "programmed weights"
+  - "maze solving"
+  - "shortest path"
+  - "Maze-Hard"
+  - "breadth-first search"
+preferred-citation:
+  type: article
+  title: "Cellular Weight-Space Programming: 115 Numbers Find Every Shortest Path in Any Maze"
+  authors:
+    - family-names: Moaddel
+      given-names: Arash
+    - family-names: Moaddel
+      given-names: Ashkan
+    - family-names: Uller
+      given-names: Nina
+  year: 2026
+  month: 11
+  publisher:
+    name: "comp-minds research, ibiLAB"
+  url: "https://comp-minds-research.onrender.com/maze/maze.html"

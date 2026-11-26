@@ -1,0 +1,29 @@
+# Everyone may read this site: search engines, AI assistants and their crawlers included.
+User-agent: *
+Allow: /
+
+# AI search, assistant and training crawlers, allowed by name
+# (OpenAI: OAI-SearchBot is ChatGPT search, GPTBot training, ChatGPT-User user fetches;
+#  Anthropic: Claude-SearchBot, ClaudeBot, Claude-User; Perplexity; Google-Extended for Gemini; Meta; Apple; Amazon; Common Crawl)
+User-agent: OAI-SearchBot
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Googlebot
+User-agent: Google-Extended
+User-agent: Bingbot
+User-agent: Applebot
+User-agent: Applebot-Extended
+User-agent: meta-externalagent
+User-agent: meta-externalfetcher
+User-agent: Amazonbot
+User-agent: DuckAssistBot
+User-agent: MistralAI-User
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://cellular-wsp-maze.onrender.com/sitemap.xml
