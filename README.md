@@ -18,16 +18,7 @@ ibiLAB · Luleå University of Technology
 
 An AI agent (Claude Opus 5.5, in Claude Code) programmed the weights of a neural cellular automaton directly in weight space, with no training, no data and no gradient descent. The network is a standard neural-cellular-automaton rule (a 3 × 3 convolution followed by two 1 × 1 layers), applied identically in every cell, and only **115 of its 1,458 numbers are non-zero**. Each cell sees nothing but its own pixel and the registers of its four neighbours, yet the grid computes the exact distance to the goal in every corridor cell and lights **every shortest path** from the start, in exactly 2L + 1 steps for a path of L cells. A Maze-Hard edition adds one pointer register and solves **all 1,000 test mazes** of the Maze-Hard benchmark with **208 non-zero weights**. Everything in this repository runs in the browser, computed from those weights.
 
-<table>
-<tr>
-<td width="50%" align="center"><img src="assets/maze-network-tour.gif" alt="Tour of the 3D network view: the cell's network, unit by unit, while a maze is being solved"></td>
-<td width="50%" align="center"><img src="assets/maze-hard-50-random.gif" alt="The automaton solving Maze-Hard test mazes"></td>
-</tr>
-<tr>
-<td align="center"><sub><b>Inside one cell.</b> The 3D network view: every unit and weight of the cell's rule, animated while a maze is solved. <a href="assets/maze-network-tour.mp4">MP4</a></sub></td>
-<td align="center"><sub><b>Maze-Hard.</b> The 208-weight edition solving test mazes of the 30 × 30 benchmark.</sub></td>
-</tr>
-</table>
+<p align="center"><img src="assets/maze-solving-115-weights.gif" width="560" alt="The 115-weight automaton solving four mazes: the blue distance flood spreads from the goal, then the orange shortest path runs from the start to the goal"></p>
 
 ## ✨ Key results
 
@@ -77,7 +68,7 @@ python3 -m http.server 8000   # then open http://localhost:8000
 │   ├── index.html           demo: Maze-Hard, live
 │   └── maze-hard-data.js    the 1,000 test mazes, the dataset's answers and per-maze results
 ├── viz/index.html           the 3D network view (three.js)
-└── assets/                  README GIFs, the hub's network-view image, favicon
+└── assets/                  README GIF, the hub's network-view image, favicon
 ```
 
 ## 👥 Authors
